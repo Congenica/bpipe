@@ -228,7 +228,14 @@ function handle_sigint() {
     if kill -0 $BPIPE_PID  ;
     then
         echo
-        read -p "Pipeline job running as process $BPIPE_PID.  Terminate? (y/n): "
+        # If it is an interactive terminal then allow the user to abort
+        if [ -t 0 ] ;
+        then
+            read -p "Pipeline job running as process $BPIPE_PID.  Terminate? (y/n): "
+        else
+            REPLY="y"
+        fi
+
         if [ "$REPLY" == "y" ];
         then
             echo
